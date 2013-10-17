@@ -7,70 +7,128 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/jquery.mobile-1.3.1.min.js"></script>
     <script src="phonegap.js"></script>
-    <script type="text/javascript" src="js/phonegap.facebook.inappbrowser.js"></script>
+    <!--<script type="text/javascript" src="js/phonegap.facebook.inappbrowser.js"></script>-->
     <script type="text/javascript" charset="utf-8">
+
+        var my_client_id = "220567994647036", // YOUR APP ID
+        my_secret = "08b47fdd154c4f9a9fc343a59eb2c514", // YOUR APP SECRET 
+        my_redirect_uri = "https://www.facebook.com/connect/login_success.html", // LEAVE THIS
+        my_type = "user_agent", my_display = "touch";  // LEAVE THIS
+
+        var facebook_token = "fbToken"; // OUR TOKEN KEEPER
+        var ref; //IN APP BROWSER REFERENCE
+
+        // FACEBOOK
+        var Facebook = {
+            init: function () {
+                // Begin Authorization
+                var authorize_url = "https://www.facebook.com/dialog/oauth?";
+                authorize_url += "client_id=" + my_client_id;
+                authorize_url += "&redirect_uri=" + my_redirect_uri;
+                authorize_url += "&display=" + my_display;
+                authorize_url += "&scope=publish_stream";
+
+                //CALL IN APP BROWSER WITH THE LINK
+                ref = window.open(authorize_url, '_blank', 'location=no');
+
+                ref.addEventListener('loadstart', function (event) {
+
+                    Facebook.facebookLocChanged(event.url);
+
+                });
+
+            },
+            facebookLocChanged: function (loc) {
+
+                if (loc.indexOf("code=") >= 1) {
+
+                    //CLOSE INAPPBROWSER AND NAVIGATE TO INDEX
+                    ref.close();
+
+                    //THIS IS MEANT TO BE DONE ON SERVER SIDE TO PROTECT CLIENT SECRET
+                    var codeUrl = 'https://graph.facebook.com/oauth/access_token?client_id=' + my_client_id + '&client_secret=' + my_secret + '&redirect_uri=' + my_redirect_uri + '&code=' + loc.split("=")[1];
+                    console.log('CODE_URL::' + codeUrl);
+                    $.ajax({
+                        url: codeUrl,
+                        data: {},
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        success: function (data, status) {
+                            //WE STORE THE TOKEN HERE
+                            localStorage.setItem(facebook_token, data.split('=')[1].split('&')[0]);
+                        },
+                        error: function () {
+                            alert("Unknown error Occured");
+                        }
+                    });
+                }
+            } 
+        }
+
         function onLoad() {
             document.addEventListener("deviceready", onDeviceReady, false);
         }
 
         function onDeviceReady() {
-            
+
         }
 
         function openBrowser() {
-            FacebookInAppBrowser.settings.appId = '220567994647036';
-            FacebookInAppBrowser.settings.redirectUrl = 'http://www.lbtconsulting.in';
-            FacebookInAppBrowser.settings.permissions = 'email';
+            Facebook.init();
+//            FacebookInAppBrowser.settings.appId = '220567994647036';
+//            FacebookInAppBrowser.settings.redirectUrl = 'http://www.lbtconsulting.in';
+//            FacebookInAppBrowser.settings.permissions = 'email';
 
-            FacebookInAppBrowser.login(loginSuccessCallback, loginUnknowErrorCallback, userIdCallback);
+//            FacebookInAppBrowser.login(loginSuccessCallback, loginUnknowErrorCallback, userIdCallback);
 
-            FacebookInAppBrowser.invite('Get to know my app!', function (response) {
-                if (response) {
-                    alert('freindz request success');
-                }
-            });
+//            FacebookInAppBrowser.invite('Get to know my app!', function (response) {
+//                if (response) {
+//                    alert('freindz request success');
+//                }
+//            });
 
-            FacebookInAppBrowser.getInfo(function () {
-                if (response) {
-                    var name = response.name,
-                id = response.id,
-                gender = response.gender;
-                    var str = '<ul data-role="listview" data-inset="true">';
-                    str += '<li>' + name + '</li>';
-                    str += '<li>' + id + '</li>';
-                    str += '<li>' + gender + '</li>';
-                    str += '</ul>';
-                    $("#dvProfileContainer").html(str);
-                }
-            });
+//            FacebookInAppBrowser.getInfo(function () {
+//                if (response) {
+//                    var name = response.name,
+//                id = response.id,
+//                gender = response.gender;
+//                    var str = '<ul data-role="listview" data-inset="true">';
+//                    str += '<li>' + name + '</li>';
+//                    str += '<li>' + id + '</li>';
+//                    str += '<li>' + gender + '</li>';
+//                    str += '</ul>';
+//                    $("#dvProfileContainer").html(str);
+//                }
+//            });
 
-            FacebookInAppBrowser.getPermissions(function (permissions) {
-                if (permissions) {
-                    //console.log(permissions.publish_actions, permissions);
-                    alert(permissions.publish_actions + ',' + permissions);
-                }
-            });
+//            FacebookInAppBrowser.getPermissions(function (permissions) {
+//                if (permissions) {
+//                    //console.log(permissions.publish_actions, permissions);
+//                    alert(permissions.publish_actions + ',' + permissions);
+//                }
+//            });
 
-            FacebookInAppBrowser.logout(function () {
-                alert('logged out successfully');
-            });
+//            FacebookInAppBrowser.logout(function () {
+//                alert('logged out successfully');
+//            });
         }
 
-        var loginSuccessCallback = function () {
-            console.log(window.localStorage.getItem('accessToken'));
-            alert('access token=' + window.localStorage.getItem('accessToken'));
-        }
+//        var loginSuccessCallback = function () {
+//            console.log(window.localStorage.getItem('accessToken'));
+//            alert('access token=' + window.localStorage.getItem('accessToken'));
+//        }
 
-        var loginUnknowErrorCallback = function () {
-            alert('Do you want to try again?');
-        }
+//        var loginUnknowErrorCallback = function () {
+//            alert('Do you want to try again?');
+//        }
 
-        userIdCallback = function () {
-            // after the login is finished the getInfo() function is called in order to store the user id
-            // if you want to do something with the user id right after we have it, use this third callback
-            //console.log(window.localStorage.getItem('uid'));
-            alert('access uid=' + window.localStorage.getItem('uid'));
-        }
+//        userIdCallback = function () {
+//            // after the login is finished the getInfo() function is called in order to store the user id
+//            // if you want to do something with the user id right after we have it, use this third callback
+//            //console.log(window.localStorage.getItem('uid'));
+//            alert('access uid=' + window.localStorage.getItem('uid'));
+//        }
 
 
     </script>
