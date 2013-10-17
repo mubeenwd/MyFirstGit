@@ -28,7 +28,7 @@ following tag to your config.xml; you will still have the INTERNET
 permission on your app, which PhoneGap requires.
 -->
     <preference name="permissions" value="none"/>
-
+    
     <!-- Customize your app and platform with the preference element. -->
     <preference name="phonegap-version" value="2.9.0" />
     <!-- all: current version of PhoneGap -->
@@ -62,6 +62,11 @@ permission on your app, which PhoneGap requires.
     <!-- android: app install location. 'auto' will choose. 'internalOnly' is device memory. 'preferExternal' is SDCard. -->
 
     <!-- Plugins can also be added here. -->
+    <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser" />
+    <plugin name="Camera" value="org.apache.cordova.CameraLauncher" />
+    <plugin name="Storage" value="org.apache.cordova.Storage" />
+    <plugin name="File" value="org.apache.cordova.FileUtils" />
+    <plugin name="FileTransfer" value="org.apache.cordova.FileTransfer" />
     <!--
 <gap:plugin name="Example" />
 A list of available plugins are available at https://build.phonegap.com/docs/plugins
@@ -94,8 +99,7 @@ A list of available plugins are available at https://build.phonegap.com/docs/plu
     <gap:splash src="res/screen/ios/screen-ipad-portrait.png" gap:platform="ios" width="768" height="1024" />
     <gap:splash src="res/screen/ios/screen-ipad-landscape.png" gap:platform="ios" width="1024" height="768" />
     <gap:splash src="res/screen/windows-phone/screen-portrait.jpg" gap:platform="winphone" />
-    <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser" />
-    <plugin name="Camera" value="org.apache.cordova.CameraLauncher" />
+   
     <access origin="*" />
     <!--
 Define access to external domains.
