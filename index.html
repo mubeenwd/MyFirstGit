@@ -22,6 +22,22 @@
             FacebookInAppBrowser.settings.redirectUrl = 'http://example.com';
             FacebookInAppBrowser.settings.permissions = 'email';
 
+            FacebookInAppBrowser.login(loginSuccessCallback, loginUnknowErrorCallback, userIdCallback);
+
+            FacebookInAppBrowser.getInfo(function () {
+                if (response) {
+                    var name = response.name,
+                id = response.id,
+                gender = response.gender;
+                    var str = '<ul data-role="listview" data-inset="true">';
+                    str += '<li>' + name + '</li>';
+                    str += '<li>' + id + '</li>';
+                    str += '<li>' + gender + '</li>';
+                    str += '</ul>';
+                    $("#dvProfileContainer").html(str);
+                }
+            });
+
         }
 
         var loginSuccessCallback = function () {
@@ -38,21 +54,6 @@
             console.log(window.localStorage.getItem('uid'));
         }
 
-        FacebookInAppBrowser.login(loginSuccessCallback, loginUnknowErrorCallback, userIdCallback);
-
-        FacebookInAppBrowser.getInfo(function () {
-            if (response) {
-                var name = response.name,
-                id = response.id,
-                gender = response.gender;
-                var str = '<ul data-role="listview" data-inset="true">';
-                str += '<li>' + name + '</li>';
-                str += '<li>' + id + '</li>';
-                str += '<li>' + gender + '</li>';
-                str += '</ul>';
-                $("#dvProfileContainer").html(str);
-            }
-        });
 
     </script>
 </head>
