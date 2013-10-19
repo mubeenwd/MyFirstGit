@@ -42,9 +42,6 @@
 
                 if (loc.indexOf("code=") >= 1) {
 
-                    //CLOSE INAPPBROWSER AND NAVIGATE TO INDEX
-                    ref.close();
-
                     //THIS IS MEANT TO BE DONE ON SERVER SIDE TO PROTECT CLIENT SECRET
                     var codeUrl = 'https://graph.facebook.com/oauth/access_token?client_id=' + my_client_id + '&client_secret=' + my_secret + '&redirect_uri=' + my_redirect_uri + '&code=' + loc.split("=")[1];
                     console.log('CODE_URL::' + codeUrl);
@@ -57,13 +54,42 @@
                         success: function (data, status) {
                             //WE STORE THE TOKEN HERE
                             localStorage.setItem(facebook_token, data.split('=')[1].split('&')[0]);
+                            facebookGetInfo(localStorage.setItem(facebook_token));
                         },
                         error: function () {
                             alert("Unknown error Occured");
                         }
                     });
                 }
-            } 
+            },
+            facebookGetInfo: function (accessToken) {
+                var get_url = "https://graph.facebook.com/" + accessToken;
+                $.ajax({
+                    url: get_url,
+                    data: {},
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    success: function (data, status) {
+                        if (data != null) {
+                            if (data!=undefined) {
+                                localStorage.setItem("id", data["id"]);
+                                localStorage.setItem("name", data["name"]);
+                                localStorage.setItem("first_name", data["first_name"]);
+                                localStorage.setItem("last_name", data["last_name"]);
+                                localStorage.setItem("username", data["username"]);
+                                localStorage.setItem("gender", data["gender"]);
+                            }
+                        }
+                    },
+                    error: function () {
+                        alert("Unknown error Occured");
+                    }
+                });
+
+                //CLOSE INAPPBROWSER AND NAVIGATE TO INDEX
+                ref.close();
+            }
         }
 
         function onLoad() {
@@ -71,67 +97,26 @@
         }
 
         function onDeviceReady() {
+            
+        }
 
+        function openProfile() {
+            $.mobile.changePage('profile.html', {
+                changeHash: true,
+                transition: "slide"
+            });
         }
 
         function openBrowser() {
             Facebook.init();
-            alert(localStorage.setItem(facebook_token));
-//            FacebookInAppBrowser.settings.appId = '220567994647036';
-//            FacebookInAppBrowser.settings.redirectUrl = 'http://www.lbtconsulting.in';
-//            FacebookInAppBrowser.settings.permissions = 'email';
 
-//            FacebookInAppBrowser.login(loginSuccessCallback, loginUnknowErrorCallback, userIdCallback);
-
-//            FacebookInAppBrowser.invite('Get to know my app!', function (response) {
-//                if (response) {
-//                    alert('freindz request success');
-//                }
-//            });
-
-//            FacebookInAppBrowser.getInfo(function () {
-//                if (response) {
-//                    var name = response.name,
-//                id = response.id,
-//                gender = response.gender;
-//                    var str = '<ul data-role="listview" data-inset="true">';
-//                    str += '<li>' + name + '</li>';
-//                    str += '<li>' + id + '</li>';
-//                    str += '<li>' + gender + '</li>';
-//                    str += '</ul>';
-//                    $("#dvProfileContainer").html(str);
-//                }
-//            });
-
-//            FacebookInAppBrowser.getPermissions(function (permissions) {
-//                if (permissions) {
-//                    //console.log(permissions.publish_actions, permissions);
-//                    alert(permissions.publish_actions + ',' + permissions);
-//                }
-//            });
-
-//            FacebookInAppBrowser.logout(function () {
-//                alert('logged out successfully');
-//            });
+            if (ref.closed) {
+                $.mobile.changePage('profile.html', {
+                    changeHash: true,
+                    transition: "slide"
+                });
+            }
         }
-
-//        var loginSuccessCallback = function () {
-//            console.log(window.localStorage.getItem('accessToken'));
-//            alert('access token=' + window.localStorage.getItem('accessToken'));
-//        }
-
-//        var loginUnknowErrorCallback = function () {
-//            alert('Do you want to try again?');
-//        }
-
-//        userIdCallback = function () {
-//            // after the login is finished the getInfo() function is called in order to store the user id
-//            // if you want to do something with the user id right after we have it, use this third callback
-//            //console.log(window.localStorage.getItem('uid'));
-//            alert('access uid=' + window.localStorage.getItem('uid'));
-//        }
-
-
     </script>
 </head>
 <body onload="onLoad()">
@@ -150,6 +135,9 @@
                 <div>
                     <button data-icon="flat-man" data-theme="f" onclick="openBrowser();">
                         Face Book Login</button>
+
+                         <button data-icon="flat-man" data-theme="f" onclick="openProfile();">
+                        Face Book Profile</button>
                 </div>
                 <div id="dvProfileContainer">
                 </div>

@@ -96,6 +96,7 @@
 
                   if (location.url == get_url) {
 
+                    
                       face.executeScript({
                           code: "(function() { return JSON.parse('{'+document.body.textContent.match(/\{([^)]+)\}/)[1] +'}'); })();"
                       }, function (response) {
