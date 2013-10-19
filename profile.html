@@ -19,12 +19,12 @@
             try {
                 var li = '';
                 $("#profilelistview").html('');
-                if (localStorage.setItem("id") != null) { localStorage.setItem("id") }
-                if (localStorage.setItem("name") != null) { li += '<li>' + localStorage.setItem("name") + '</li>' }
-                if (localStorage.setItem("first_name") != null) { li += '<li>' + localStorage.setItem("first_name") + '</li>' }
-                if (localStorage.setItem("last_name") != null) { li += '<li>' + localStorage.setItem("last_name") + '</li>' }
-                if (localStorage.setItem("username") != null) { li += '<li>' + localStorage.setItem("username") + '</li>' }
-                if (localStorage.setItem("gender") != null) { li += '<li>' + localStorage.setItem("gender") + '</li>' }
+                if (localStorage.getItem("id") != null) { localStorage.setItem("id") }
+                if (localStorage.getItem("name") != null) { li += '<li>' + localStorage.getItem("name") + '</li>' }
+                if (localStorage.getItem("first_name") != null) { li += '<li>' + localStorage.getItem("first_name") + '</li>' }
+                if (localStorage.getItem("last_name") != null) { li += '<li>' + localStorage.getItem("last_name") + '</li>' }
+                if (localStorage.getItem("username") != null) { li += '<li>' + localStorage.getItem("username") + '</li>' }
+                if (localStorage.getItem("gender") != null) { li += '<li>' + localStorage.getItem("gender") + '</li>' }
                 $("#profilelistview").html(li);
             } catch (e) {
                 alert(e.message);

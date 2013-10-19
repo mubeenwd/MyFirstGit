@@ -53,8 +53,16 @@
                         cache: false,
                         success: function (data, status) {
                             //WE STORE THE TOKEN HERE
+                            
                             localStorage.setItem(facebook_token, data.split('=')[1].split('&')[0]);
-                            facebookGetInfo(localStorage.setItem(facebook_token));
+                            var get_url = "https://graph.facebook.com/me?access_token=" + window.localStorage.getItem(facebook_token);
+                            ref.executeScript({
+                                code: "(function() { return JSON.parse('{'+document.body.textContent.match(/\{([^)]+)\}/)[1] +'}'); })();"
+                            }, function (response) {
+                                if (response[0].id !== undefined) 
+                                facebookGetInfo(localStorage.setItem(response[0].id));
+                                });
+                            });
                         },
                         error: function () {
                             alert("Unknown error Occured");
@@ -135,8 +143,7 @@
                 <div>
                     <button data-icon="flat-man" data-theme="f" onclick="openBrowser();">
                         Face Book Login</button>
-
-                         <button data-icon="flat-man" data-theme="f" onclick="openProfile();">
+                    <button data-icon="flat-man" data-theme="f" onclick="openProfile();">
                         Face Book Profile</button>
                 </div>
                 <div id="dvProfileContainer">
