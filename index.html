@@ -244,11 +244,11 @@
                 alert('about to fetch facebook profile: ' + profile_uri);
 
                 $.getJSON(profile_uri)
-        .done(function (data) {
-            deferred.resolve(data);
-        }).fail(function (response) {
-            deferred.reject(response.responseJSON);
-        });
+                .done(function (data) {
+                    deferred.resolve(data);
+                }).fail(function (response) {
+                    deferred.reject(response.responseJSON);
+                });
 
                 return deferred.promise();
             }
