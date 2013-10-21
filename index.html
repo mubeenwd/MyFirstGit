@@ -265,7 +265,7 @@
                 $.when(fbapi.authorize({
                     client_id: '220567994647036',
                     client_secret: '08b47fdd154c4f9a9fc343a59eb2c514',
-                    redirect_uri: 'http://www.lbtconsuting.in/'
+                    redirect_uri: 'https://www.facebook.com/connect/login_success.html'
                 }))
                 .then(function (access_token) {
                     alert('Executing then callback with access token: ' + access_token); fbapi.profile(access_token).done(function (data) {
