@@ -231,9 +231,9 @@
                         });
                     }
                 });
+
                 return deferred.promise();
             },
-
             profile: function (access_token) {
                 var deferred = $.Deferred();
 
@@ -254,7 +254,6 @@
         };
 
         $(document).on('deviceready', function () {
-
             //enable cross site script
             jQuery.support.cors = true;
 
