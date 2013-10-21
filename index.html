@@ -279,6 +279,20 @@
                     });
                 });
             });
+
+            $("#btnHome").bind("tap", function () {
+                $.mobile.changePage('#index', {
+                    changeHash: true,
+                    transition: "slide"
+                });
+            });
+
+            $("#btnProfile").bind("tap", function () {
+                $.mobile.changePage('#profile', {
+                    changeHash: true,
+                    transition: "slide"
+                });
+            });
         });
     </script>
     <style type="text/css">
@@ -304,6 +318,8 @@
         <div data-role="content" style="padding-left:5%;padding-right:5%;">
             <button data-icon="flat-settings" data-theme="d" id="btnLogin">
                 Face Book Login</button>
+                 <button data-icon="flat-settings" data-theme="b" id="btnProfile">
+                Face Book Profile</button>
             <p id="prLoginStatus">
             </p>
         </div>
